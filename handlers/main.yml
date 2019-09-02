@@ -1,9 +1,14 @@
 ---
-
 - name: restart php-fpm
   service:
     name: "{{ php_fpm_daemon }}"
     state: restarted
+
+- name: daemon_reload php-fpm
+  service:
+    name: "{{ php_fpm_daemon }}"
+    daemon_reload: yes
+    state: started
 
 - name: restart blackfire-agent
   service:

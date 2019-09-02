@@ -100,6 +100,19 @@
   changed_when: False
   tags: php_config
 
+- name: "create systemd directory for override {{php_fpm_daemon}} value"
+  file:
+    state: directory
+    path: "/etc/systemd/system/{{php_fpm_daemon}}.service.d"
+
+- name: "set restart always in systemd service for {{php_fpm_daemon}}"
+  copy:
+    src: systemd_override.conf
+    dest: "/etc/systemd/system/{{php_fpm_daemon}}.service.d/override.conf"
+  register: systemd_override
+  notify:
+    - daemon_reload php-fpm
+
 - name: service start
   service:
     name: "{{ item }}"
